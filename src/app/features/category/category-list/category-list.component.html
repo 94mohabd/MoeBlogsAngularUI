@@ -1,0 +1,92 @@
+<div class="container">
+    <h1 class="mt-3">Category List</h1>
+    <div class="d-flex justify-content-between mt-3">
+        <div class="d-flex">
+            <input type="text" class="form-control" placeholder="Search" (input)="onSearch(queryText.value)" #queryText>
+            <button type="button" class="btn btn-warning ms-3" (click)="onSearch(queryText.value)">Search</button>
+        </div>
+
+        <a [routerLink]="['/admin/categories/add']" class="btn btn-primary">Add Category</a>
+    </div>
+
+    <ng-container *ngIf="categories$ | async as categories; else notFound">
+        <ng-container *ngIf="categories.length > 0; else emptyList">
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>
+                            Name
+                            <span>
+                                <span>
+                                    <button type="button" class="btn btn-light" (click)="sort('name', 'asc')">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button type="button" class="btn btn-light" (click)="sort('name', 'desc')">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </button>
+                                </span>
+                            </span>
+                        </th>
+                        <th>
+                            Url Handle
+                            <span>
+                                <span>
+                                    <button type="button" class="btn btn-light" (click)="sort('url', 'asc')">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </button>
+                                </span>
+                                <span>
+                                    <button type="button" class="btn btn-light" (click)="sort('url', 'desc')">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </button>
+                                </span>
+                            </span>
+                        </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cateogry of categories">
+                        <td>{{ cateogry.id }}</td>
+                        <td>{{ cateogry.name }}</td>
+                        <td>{{ cateogry.urlHandle }}</td>
+                        <td>
+                            <a class="btn btn-light" [routerLink]="['/admin/categories/', cateogry.id]">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" style="cursor: pointer;">
+                    <li class="page-item">
+                        <a class="page-link" (click)="getPrevPage()">Previous</a>
+                    </li>
+
+                    <li *ngFor="let item of list; let index= index" class="page-item"
+                        [class.active]="pageNumber === (index + 1)">
+                        <a class="page-link" (click)="getPage(index + 1)">{{index + 1}}</a>
+                    </li>
+
+                    <li class="page-item">
+                        <a class="page-link" (click)="getNextPage()">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </ng-container>
+    </ng-container>
+    <ng-template #emptyList>
+        <div class="alert alert-warning mt-3" role="alert">
+            Category list is Empty!
+        </div>
+    </ng-template>
+    <ng-template #notFound>
+        <div class="alert alert-warning mt-3" role="alert">
+            Category not Found!
+        </div>
+    </ng-template>
+</div>
